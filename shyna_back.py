@@ -5,9 +5,27 @@ from datetime import datetime, date, timedelta
 import sys
 import csv
 import telegram
+from pytz import all_timezones
+from dateutil import tz
+
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.insert(0, dir_path)
+
+
+def time_zone_change():
+    for zone in all_timezones:
+        print(zone)
+        # Asia/Kolkata
+
+def convert_time_zone(from_zone, time_value):
+    from_zone = tz.gettz(from_zone)
+    to_zone = tz.gettz('Asia/Kolkata')
+    time_value = datetime.strptime(str(time_value).replace('T',' ').strip('Z').split('+')[0].split('.')[0], '%Y-%m-%d %H:%M:%S')
+    time_value = time_value.replace(tzinfo=from_zone)
+    time_value = time_value.astimezone(to_zone)
+    time_value = str(time_value).split('+')[0]
+    return time_value
 
 
 def news_api_key():
